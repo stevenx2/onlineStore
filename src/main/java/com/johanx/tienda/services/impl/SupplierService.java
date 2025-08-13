@@ -38,4 +38,19 @@ public class SupplierService implements ISupplier {
         return dao.save(supplier);
     }
 
+    @Override
+    public Supplier findByName(String name) {
+        return dao.findByName(name).orElse(null);
+    }
+
+    @Override
+    public boolean existsByName(String name) {
+        return dao.findByName(name).isPresent();
+    }
+
+    @Override
+    public void deleteById(Long id) {
+        dao.deleteById(id);
+    }
+
 }

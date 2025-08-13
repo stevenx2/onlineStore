@@ -1,6 +1,7 @@
 package com.johanx.tienda.controllerAdvice;
 
 import com.johanx.tienda.runtimeException.ResourceNotFoundException;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -17,15 +18,31 @@ import java.util.Map;
 public class StoreControllerAdvice {
 
 
+    /**
+     * excepción lanzada cuando el recurso no existe
+     */
     @ExceptionHandler(ResourceNotFoundException.class)
     public ResponseEntity<?> resourceNotFound(ResourceNotFoundException e){
         Map<String,Object> header = getHeaderHttp(e.getMessage());
 
         return ResponseEntity
-                .status(HttpStatus.NOT_FOUND.value())
+                .status(HttpStatus.NOT_FOUND)
                 .body(header);
     }
 
+
+    /**
+     * captura excepción cuando se viola la integridad de la base de datos,
+     * como repetir valor en columnas únicas
+     */
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ResponseEntity<?> dataBaseConflict(DataIntegrityViolationException e){
+        Map<String,Object> header = getHeaderHttp(e.getMessage());
+
+        return ResponseEntity
+                .status(HttpStatus.CONFLICT)
+                .body(header);
+    }
 
 
     /**

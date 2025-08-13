@@ -4,6 +4,7 @@ import com.johanx.tienda.model.Supplier;
 import com.johanx.tienda.runtimeException.ResourceNotFoundException;
 import com.johanx.tienda.services.ISupplier;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -38,6 +39,11 @@ public class SupplierController {
 
     @PostMapping
     public ResponseEntity<Supplier> postSupplier(@RequestBody Supplier supplier){
+
+        if(supplierService.existsByName(supplier.getName())){
+            throw new DataIntegrityViolationException("No pueden existir dos proveedores con el mismo nombre");
+        }
+
         Supplier savedSupplier = supplierService.save(supplier);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(savedSupplier.getSupplier_id()).toUri();
         return ResponseEntity.created(uri).body(savedSupplier);

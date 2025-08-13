@@ -15,4 +15,10 @@ public interface ISupplier {
     Supplier save(Supplier supplier);
 
 
+    Supplier findByName(String name);
+
+    boolean existsByName(String name);
+
+    void deleteById(Long id);
+
 }

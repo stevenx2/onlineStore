@@ -45,4 +45,14 @@ public class CategoryService implements ICategory {
     public void deleteById(Long id) {
         dao.deleteById(id);
     }
+
+    @Override
+    public Category findByName(String name) {
+        return dao.findByName(name).orElse(null);
+    }
+
+    @Override
+    public boolean existsByName(String name) {
+        return dao.findByName(name).isPresent();
+    }
 }

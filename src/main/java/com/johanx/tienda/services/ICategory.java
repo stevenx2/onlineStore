@@ -19,4 +19,8 @@ public interface ICategory {
 
     void deleteById(Long id);
 
+    Category findByName(String name);
+
+    boolean existsByName(String name);
+
 }

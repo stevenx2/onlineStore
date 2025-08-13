@@ -5,6 +5,7 @@ import com.johanx.tienda.model.Category;
 import com.johanx.tienda.runtimeException.ResourceNotFoundException;
 import com.johanx.tienda.services.ICategory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -42,6 +43,11 @@ public class CategoryController {
 
     @PostMapping
     public ResponseEntity<Category> postSupplier(@RequestBody Category category){
+
+        if(categoryService.existsByName(category.getName())){
+            throw new DataIntegrityViolationException("No pueden existir dos categorías con el mismo nombre");
+        }
+
         Category savedCategory = categoryService.save(category);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(savedCategory.getCategory_id()).toUri();
         return ResponseEntity.created(uri).body(savedCategory);

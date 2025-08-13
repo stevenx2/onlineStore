@@ -21,6 +21,7 @@ public class Supplier {
 
     private String location;
 
+    @Column(unique = true)
     private String name;
 
 
