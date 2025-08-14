@@ -1,5 +1,6 @@
 package com.johanx.tienda.controllerAdvice;
 
+import com.johanx.tienda.runtimeException.ResourceAlreadyExists;
 import com.johanx.tienda.runtimeException.ResourceNotFoundException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
@@ -37,6 +38,19 @@ public class StoreControllerAdvice {
      */
     @ExceptionHandler(DataIntegrityViolationException.class)
     public ResponseEntity<?> dataBaseConflict(DataIntegrityViolationException e){
+        Map<String,Object> header = getHeaderHttp(e.getMessage());
+
+        return ResponseEntity
+                .status(HttpStatus.CONFLICT)
+                .body(header);
+    }
+
+
+    /***
+     * excepción lanzada cuando se manda a crear un objeto que ya existe en la base de datos
+     */
+    @ExceptionHandler(ResourceAlreadyExists.class)
+    public ResponseEntity<?> resourceAlreadyExists(ResourceAlreadyExists e){
         Map<String,Object> header = getHeaderHttp(e.getMessage());
 
         return ResponseEntity

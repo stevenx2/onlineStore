@@ -1,6 +1,7 @@
 package com.johanx.tienda.services;
 
 import com.johanx.tienda.model.Product;
+import com.johanx.tienda.runtimeException.ResourceNotFoundException;
 
 import java.util.List;
 
@@ -13,7 +14,7 @@ public interface IProduct {
 
     Product findById(Long id);
 
-    Product save(Product product);
+    Product save(Product product) throws ResourceNotFoundException;
 
     void deleteById(Long id);
 
